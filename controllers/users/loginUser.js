@@ -8,6 +8,9 @@ const {
 } = require("../../routes/errors/HttpErrors");
 
 const { SECRET_KEY } = process.env;
+const {
+  accessTokenExpiresIn,
+} = require("../config/defaults");
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
@@ -41,7 +44,11 @@ const loginUser = async (req, res) => {
     id: user._id,
   };
   //creating a token
-  const token = setToken(payload, SECRET_KEY);
+  const token = setToken(
+    payload,
+    SECRET_KEY,
+    accessTokenExpiresIn
+  );
   await User.findByIdAndUpdate(user._id, {
     token,
   });

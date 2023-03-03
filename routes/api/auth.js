@@ -31,8 +31,14 @@ router.get(
 );
 
 router.post(
+  "/confirm-email-retry",
+  validateBody(schema.usersEmailConfirm),
+  ctrl.resendUsersEmailConfEmail
+);
+
+router.post(
   "/login",
-  validateBody(schema.loginUserSchema),
+  validateBody(schema.loginUser),
   ctrl.loginUser
 );
 

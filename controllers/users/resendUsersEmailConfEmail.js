@@ -1,5 +1,3 @@
-const bcrypt = require("bcrypt");
-
 const { User } = require("../../models");
 const { SECRET_KEY, BASE_URL, PORT } =
   process.env;
@@ -19,21 +17,19 @@ const {
   userEmailConfirmationEmailSender,
 } = require("../config/defaults");
 
-const addUser = async (req, res) => {
-  const { email, password } = req.body;
+const resendUsersEmailConfEmail = async (
+  req,
+  res
+) => {
+  const { email } = req.body;
   //check if user already exist
   const user = await User.findOne({ email });
-  if (user) {
+  if (!user || user.isEmailConfirmed) {
     throw HttpError(
-      409,
-      `User with email ${email} is already registered`
+      404,
+      `User with email ${email} not found or doesn\'t need in email confirmation`
     );
   }
-  //hash password to store in db
-  const hashedPassword = await bcrypt.hash(
-    password,
-    10
-  );
 
   //creating a token for email verification
   const payload = {
@@ -67,23 +63,20 @@ const addUser = async (req, res) => {
   });
   if (result !== 202) {
     //failed to send confirmation email
-    res
-      .status(500)
-      .json({ error: result.message });
-    return null;
+    throw HttpError(
+      500,
+      `Unable to send email to ${email}: ${result.message}`
+    );
   }
 
-  const dbAnswer = await User.create({
-    email,
-    password: hashedPassword,
-    token,
-  });
+  const dbAnswer = await User.findByIdAndUpdate(
+    user._id,
+    { token }
+  );
   //send response to front-end
-  res.status(201).json({
-    "confirmation req sent with status code":
-      result,
-    email: dbAnswer.email,
+  res.status(202).json({
+    message: `Confirmation req sent to ${email}. Post server response: ${result}`,
   });
 };
 
-module.exports = addUser;
+module.exports = resendUsersEmailConfEmail;

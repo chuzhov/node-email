@@ -35,7 +35,7 @@ const updateUsersAvatar = async (req, res) => {
   ) {
     await fs.unlink(originalname);
     throw HttpError(
-      400,
+      415, //415 Unsupported Media Type
       "Invalid file type. Acceptables are: ",
       USER_AVATAR_PARAMS.acceptableFileTypes.join(
         ", "
