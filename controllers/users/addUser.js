@@ -1,8 +1,12 @@
 const bcrypt = require("bcrypt");
 
 const { User } = require("../../models");
-const { SECRET_KEY, BASE_URL, PORT } =
-  process.env;
+const {
+  SECRET_KEY,
+  BASE_URL,
+  PORT,
+  MAILER_EMAIL,
+} = process.env;
 const {
   setToken,
   sendEmail,
@@ -57,7 +61,7 @@ const addUser = async (req, res) => {
 
   const result = await sendEmail({
     to: email,
-    from: userEmailConfirmationEmailSender,
+    from: MAILER_EMAIL,
     subject:
       "Please, confirm your e-mail address",
     html: emailConfirmationTemplate(
