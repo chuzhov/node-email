@@ -1,5 +1,12 @@
 const express = require("express");
 
+const { oAuth2Client } = require("../../helpers");
+
+const SCOPES = [
+  "https://www.googleapis.com/auth/userinfo.profile",
+  "https://www.googleapis.com/auth/userinfo.email",
+];
+
 const {
   users: ctrl,
 } = require("../../controllers/");
@@ -9,6 +16,7 @@ const {
   auth,
   adminAuth,
   emailConfirmation,
+  googleAuth,
   uploadAvatar,
 } = require("../../middlewares");
 
@@ -34,6 +42,20 @@ router.post(
   "/confirm-email-retry",
   validateBody(schema.usersEmailConfirm),
   ctrl.resendUsersEmailConfEmail
+);
+
+router.get("/login/google-oauth2", (req, res) => {
+  const url = oAuth2Client.generateAuthUrl({
+    access_type: "offline",
+    scope: SCOPES,
+  });
+  res.redirect(url);
+});
+
+router.get(
+  "/google/callback",
+  googleAuth,
+  ctrl.loginUser
 );
 
 router.post(

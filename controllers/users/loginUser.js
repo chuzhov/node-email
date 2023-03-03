@@ -13,7 +13,11 @@ const {
 } = require("../config/defaults");
 
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const {
+    email,
+    password = "",
+    authType = "",
+  } = req.body; //password="" for OAuth users
   //searching for the user with given email:
   const user = await User.findOne({ email });
   if (!user) {
@@ -25,19 +29,23 @@ const loginUser = async (req, res) => {
   if (!user.isEmailConfirmed) {
     throw HttpError(
       403,
-      "Please confirm your email address to login"
+      "E-mail was not confirmed"
     );
   }
-  //comparing given password with a stored hash:
-  const compareResult = await bcrypt.compare(
-    password, // a password from a body of the request
-    user.password // a password from mongoDB
-  );
-  if (!compareResult) {
-    throw HttpError(
-      401,
-      "Email or password is invalid"
+
+  if (!authType) {
+    // if user is trying to login with email and password
+    //comparing given password with a stored hash:
+    const compareResult = await bcrypt.compare(
+      password, // a password from a body of the request
+      user.password // a password from mongoDB
     );
+    if (!compareResult) {
+      throw HttpError(
+        401,
+        "Email or password is invalid"
+      );
+    }
   }
   //user has found, preparing payload id for making a token
   const payload = {

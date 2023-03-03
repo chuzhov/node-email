@@ -4,6 +4,7 @@ const setToken = require("./setToken");
 const sendConfirmationEmail = require("./sendConfirmationEmail");
 const sendEmail = require("./sendEmail");
 const resizeAndMoveImg = require("./resizeAndMoveImg");
+const oAuth2Client = require("./googleOAuthClient");
 
 module.exports = {
   setPagination,
@@ -12,4 +13,5 @@ module.exports = {
   sendConfirmationEmail,
   sendEmail,
   resizeAndMoveImg,
+  oAuth2Client,
 };
