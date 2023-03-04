@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const emailConfirmationTemplate = require("../templates/emailConfirmationTemplate");
+const emailConfirmationTemplate = require("../templates/emailConfirmation.template");
 
 const {
   FRONTEND_BASE_URL,
@@ -21,7 +21,7 @@ async function sendConfirmationEmail(
   userEmail,
   confirmationToken
 ) {
-  const confirmationLink = `${FRONTEND_BASE_URL}/users/confirm-email?token=${confirmationToken}`;
+  const confirmationLink = `${BASE_URL}:${PORT}/users/confirm-email?token=${confirmationToken}`;
 
   const mailOptions = {
     from: MAILER_EMAIL,

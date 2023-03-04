@@ -21,6 +21,7 @@ const emailConfirmation = async (
       token,
       SECRET_KEY
     );
+
     const user = await User.findOne({
       email,
       token,
@@ -32,8 +33,12 @@ const emailConfirmation = async (
     next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
-      error.message =
-        "Token error: " + error.message;
+      if (error.message === "jwt expired") {
+        error.message =
+          "Confirmation token is expired. Resend email in req.body to endpoint users/confirm-email-retry";
+      } else
+        error.message =
+          "Token error: " + error.message;
     }
     next(HttpError(401, error.message));
   }
