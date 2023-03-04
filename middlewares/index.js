@@ -4,6 +4,7 @@ const adminAuth = require("./adminAuth");
 const emailConfirmation = require("./emailConfirmation");
 const uploadAvatar = require("./uploadAvatar");
 const googleAuth = require("./googleAuth");
+const requestLimiter = require("./requestLimiter");
 
 module.exports = {
   validateBody,
@@ -12,4 +13,5 @@ module.exports = {
   emailConfirmation,
   googleAuth,
   uploadAvatar,
+  requestLimiter,
 };

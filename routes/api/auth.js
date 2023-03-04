@@ -18,6 +18,7 @@ const {
   emailConfirmation,
   googleAuth,
   uploadAvatar,
+  requestLimiter,
 } = require("../../middlewares");
 
 const schema = require("../validation/");
@@ -40,6 +41,7 @@ router.get(
 
 router.post(
   "/confirm-email-retry",
+  requestLimiter,
   validateBody(schema.usersEmailConfirm),
   ctrl.resendUsersEmailConfEmail
 );
