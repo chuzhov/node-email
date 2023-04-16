@@ -1,4 +1,4 @@
-# GoIT Node.js server
+# Node.js sample server
 
 REST API для роботи з колекцією контактів.
 
