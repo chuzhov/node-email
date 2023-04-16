@@ -1,6 +1,6 @@
-# GoIT Node.js Course Homework #4
+# GoIT Node.js server
 
-Продовження створення REST API для роботи з колекцією контактів.
+REST API для роботи з колекцією контактів.
 
 Користувачі:
 | Method | Endpoint | |
